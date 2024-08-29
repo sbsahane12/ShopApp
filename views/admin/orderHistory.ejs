@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <style>
+        /* Custom Styles */
+        .btn-custom {
+            border-radius: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            border-bottom: 2px solid #0056b3;
+        }
+        .modal-footer {
+            background-color: #f1f1f1;
+            border-top: 2px solid #dee2e6;
+        }
+        .table-responsive {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        table {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 800px; /* Ensures horizontal scroll for large tables */
+        }
+        table thead {
+            background-color: #007bff;
+            color: white;
+        }
+        table th, table td {
+            vertical-align: middle;
+            padding: 12px 10px;
+        }
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        table th i {
+            margin-left: 4px;
+            color: #dee2e6;
+        }
+        .list-group-item {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .list-group-item i {
+            margin-left: 8px;
+            color: #007bff;
+        }
+        .search-container {
+        position: relative;
+        margin-bottom: 30px;
+      }
+      .search-container i {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        color: #007bff;
+      }
+      #searchInput {
+        padding: 10px 40px;
+        border-radius: 25px;
+        border: 2px solid #007bff;
+        transition: all 0.3s;
+      }
+      #searchInput:focus {
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        outline: none;
+      }
+
+      .custom-badge {
+    padding: 0.5em 1em;  /* Adjust padding to fix width and height */
+    font-size: 0.85rem;  /* Control font size */
+    border-radius: 0.5rem; /* Optional: make the badge more rounded */
+    min-width: 75px;      /* Set a minimum width */
+    text-align: center;   /* Center align the text */
+    display: inline-block;
+}
+
+    </style>
+</head>
+<body>
+    <%- include('../partials/header1') %>
+
+    <%- include('../partials/flash') %>
+    <div class="container mt-5">
+        <h1 class="text-center"><i class="fas fa-box"></i> Order Details</h1>
+
+        <!-- Search Input -->
+
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control"
+              placeholder="Search users by ID"
+            />
+          </div>
+
+        <div class="btn-group mt-3 mt-sm-0" role="group">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#todayOrdersModal">
+                <i class="fas fa-calendar-day"></i> Today's Orders
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#last7DaysOrdersModal">
+                <i class="fas fa-history"></i> Last 7 Days Orders
+            </button>
+        </div>
+
+        <!-- Order Details Table -->
+        <div class="table-responsive table-container">
+            <table class="table table-bordered table-hover">
+              <thead class="table-dark">
+                    <tr>
+                        <th>Order ID <i class="fas fa-id-badge"></i></th>
+                        <th>Date <i class="fas fa-calendar-day"></i></th>
+                        <th>Name <i class="fas fa-user"></i></th>
+                        <th>Status <i class="fas fa-info-circle"></i></th>
+                        <th>Payment <i class="fas fa-rupee-sign"></i></th>
+                        <th>Reward <i class="fas fa-gift"></i></th>
+                        <th>Billing <i class="fas fa-credit-card"></i></th>
+                        <th>Payment Status <i class="fas fa-check-circle"></i></th>
+                        <th>View Order <i class="fas fa-boxes"></i></th>
+                        <th>Actions <i class="fas fa-cogs"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                    <% allOrders.forEach(order => { %>
+                        <tr>
+                            <td><%= order._id %></td>
+                            <td><%= order.createdAt.toLocaleDateString() %></td>
+                            <td><%= order.user ? order.user.name : 'Unknown User' %></td>
+
+                            <!-- Status Badge -->
+                            <td>
+                                <% if (order.status === 'Completed') { %>
+                                    <span class="badge custom-badge bg-success">Completed</span>
+                                <% } else if (order.status === 'Pending') { %>
+                                    <span class="badge custom-badge bg-warning text-dark">Pending</span>
+                                <% } else { %>
+                                    <span class="badge custom-badge bg-secondary">Unknown</span>
+                                <% } %>
+                            </td>
+
+                            <td>$<%= order.totalAmount %></td>
+                            <td><%= order.totalRewardPoints %></td>
+
+                            <!-- Billing Badge -->
+                            <td>
+                                <% if (order.paymentOption === 'Cash on Delivery') { %>
+                                    <span class="badge custom-badge bg-info">COD</span>
+                                <% } else { %>
+                                    <span class="badge custom-badge bg-primary">Online</span>
+                                <% } %>
+                            </td>
+
+                            <!-- Payment Status Badge -->
+                            <td>
+                                <% if (order.paymentStatus === 'Pending') { %>
+                                    <span class="badge custom-badge bg-danger">Pending</span>
+                                <% } else { %>
+                                    <span class="badge custom-badge bg-success">Completed</span>
+                                <% } %>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-secondary btn-custom" data-bs-toggle="modal" data-bs-target="#viewItemsModal-<%= order._id %>">
+                                    <i class="fas fa-eye"></i> View Items
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-custom" data-bs-toggle="modal" data-bs-target="#updateOrderStatusModal-<%= order._id %>">
+                                    <i class="fas fa-edit"></i> Update Status
+                                </button>
+                            </td>
+                        </tr>
+
+
+                    <!-- View Items Modal -->
+                    <div class="modal fade" id="viewItemsModal-<%= order._id %>" tabindex="-1" aria-labelledby="viewItemsModalLabel-<%= order._id %>" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewItemsModalLabel-<%= order._id %>">
+                                        <i class="fas fa-box-open"></i> Items in Order <%= order._id %>
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+
+                                    <ul class="list-group">
+                                        <% order.items.forEach(orderItem => { %>
+                                          <% if (orderItem.item) { %>
+                                            <li class="list-group-item">
+                                              <%= orderItem.quantity %> x <%= orderItem.item.name %>
+                                              ($<%= orderItem.price %>)
+                                              - Category: <%= orderItem.item.selectedCategoryName %>
+                                            </li>
+                                          <% } else { %>
+                                            <li class="list-group-item">Item Deleted</li>
+                                          <% } %>
+                                        <% }) %>
+                                      </ul>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Update Order Status Modal -->
+                    <div class="modal fade" id="updateOrderStatusModal-<%= order._id %>" tabindex="-1" aria-labelledby="updateOrderStatusModalLabel-<%= order._id %>" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateOrderStatusModalLabel-<%= order._id %>">
+                                        <i class="fas fa-edit"></i> Update Order Status
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/admin/orders/<%= order._id %>/update" method="POST">
+                                        <div class="mb-3">
+                                            <label for="status" class="form-label">Order Status</label>
+                                            <select class="form-select" id="status" name="status">
+                                                <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                                <option value="Completed" <%= order.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+                                                <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="paymentStatus-<%= order._id %>" class="form-label">Payment Status</label>
+                                            <select class="form-select" id="paymentStatus-<%= order._id %>" name="paymentStatus">
+                                                <option value="Pending" <%= order.paymentStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                <option value="Completed" <%= order.paymentStatus === 'Completed' ? 'selected' : '' %>>Completed</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Today's Orders Modal -->
+        <div class="modal fade" id="todayOrdersModal" tabindex="-1" aria-labelledby="todayOrdersModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="todayOrdersModalLabel">
+                            <i class="fas fa-calendar-day"></i> Today's Orders
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Display today's orders in a table -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <!-- <th>Name</th> -->
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                        <th>Reward</th>
+                                        <th>Billing</th>
+                                        <th>Payment Status</th>
+                                        <th>Items</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="todayOrdersTableBody">
+                                    <% todayOrders.forEach(order => { %>
+                                    <tr>
+                                        <td><%= order._id %></td>
+                                        <td><%= order.createdAt.toLocaleDateString() %></td>
+                                        <!-- <td><%= order.user ? order.user.name : 'Unknown User' %></td> -->
+                                        <td><%= order.status %></td>
+                                        <td>$<%= order.totalAmount %></td>
+                                        <td><%= order.totalRewardPoints %></td>
+                                        <td>
+                                            <% if (order.paymentOption === 'Cash on Delivery') { %>
+                                              COD
+                                            <% } else { %>
+                                              Online
+                                            <% } %>
+                                          </td>
+
+                                        <td><%= order.paymentStatus %></td>
+                                        <td>  <button class="btn btn-secondary btn-custom" data-bs-toggle="modal" data-bs-target="#viewItemsModal-<%= order._id %>">
+                                           View
+                                        </button></td>
+                                        <td>
+                                            <button class="btn btn-warning btn-custom" data-bs-toggle="modal" data-bs-target="#updateOrderStatusModal-<%= order._id %>">
+                                              Update
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Last 7 Days Orders Modal -->
+        <div class="modal fade" id="last7DaysOrdersModal" tabindex="-1" aria-labelledby="last7DaysOrdersModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="last7DaysOrdersModalLabel">
+                            <i class="fas fa-history"></i> Last 7 Days Orders
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Display last 7 days orders in a table -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <!-- <th>Name</th> -->
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                        <th>Reward</th>
+                                        <th>Billing</th>
+                                        <th>Payment Status</th>
+                                        <th>Items</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="last7DaysOrdersTableBody">
+                                    <% last7DaysOrders.forEach(order => { %>
+                                    <tr>
+                                        <td><%= order._id %></td>
+                                        <td><%= order.createdAt.toLocaleDateString() %></td>
+                                        <!-- <td><%= order.user ? order.user.name : 'Unknown User' %></td> -->
+                                        <td><%= order.status %></td>
+                                        <td>$<%= order.totalAmount %></td>
+                                        <td><%= order.totalRewardPoints %></td>
+                                        <td>
+                                            <% if (order.paymentOption === 'Cash on Delivery') { %>
+                                              COD
+                                            <% } else { %>
+                                              Online
+                                            <% } %>
+                                          </td>
+                                        <td><%= order.paymentStatus %></td>
+                                        <td>  <button class="btn btn-secondary btn-custom" data-bs-toggle="modal" data-bs-target="#viewItemsModal-<%= order._id %>">
+                                            View
+                                         </button></td>
+                                        <td>
+                                            <button class="btn btn-warning btn-custom" data-bs-toggle="modal" data-bs-target="#updateOrderStatusModal-<%= order._id %>">
+                                                Update
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/footer1') %>
+</body>
+</html>

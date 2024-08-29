@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <style>
+        .btn-custom {
+            border-radius: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            border-bottom: 2px solid #0056b3;
+        }
+        .modal-footer {
+            background-color: #f1f1f1;
+            border-top: 2px solid #dee2e6;
+        }
+        .table-responsive {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        table {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 800px; /* Ensures horizontal scroll for large tables */
+        }
+        table thead {
+            background-color: #007bff;
+            color: white;
+        }
+        table th, table td {
+            vertical-align: middle;
+            padding: 12px 10px;
+        }
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        table th i {
+            margin-left: 4px;
+            color: #dee2e6;
+        }
+        .list-group-item {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .list-group-item i {
+            margin-left: 8px;
+            color: #007bff;
+        }
+        .search-container {
+        position: relative;
+        margin-bottom: 30px;
+      }
+      .search-container i {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        color: #007bff;
+      }
+      #searchInput {
+        padding: 10px 40px;
+        border-radius: 25px;
+        border: 2px solid #007bff;
+        transition: all 0.3s;
+      }
+      #searchInput:focus {
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header1') %>
+    <%- include('../partials/flash') %>
+    <div class="container mt-5 mb-5">
+      <h1 class="text-center mb-4">
+        <i class="fas fa-users"></i> User Management
+      </h1>
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          id="searchInput"
+          class="form-control"
+          placeholder="Search users by username, email, or phone"
+        />
+      </div>
+
+      <div class="table-responsive table-container">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th><i class="fas fa-user"></i> Username </th >
+              <th><i class="fas fa-envelope"></i> Email</th>
+              <th><i class="fas fa-phone"></i> Phone</th>
+              <th><i class="fas fa-map-marker-alt"></i>Address</th>
+              <th><i class="fas fa-gift"></i>Reward Points</th>
+              <th><i class="fas fa-cogs"></i> Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <% usersWithRewards.forEach(userReward => { %>
+            <tr>
+              <td><%= userReward.user.name %></td>
+              <td><%= userReward.user.email %></td>
+              <td><%= userReward.user.phone %></td>
+              <td>
+                <%= userReward.user.address['street'] %>, <%= userReward.user.address['city'] %>,
+                <%= userReward.user.address['state'] %>, <%= userReward.user.address['pincode'] %>
+              </td>
+              <td>
+                <span class="badge bg-success ">
+                  <%= userReward.totalRewardPoints %>
+                </span>
+              </td>
+              <td>
+                <a
+                  class="btn btn-info btn-sm btn-custom"
+                   href="/admin/orderHistory"
+                >
+                  <i class="fas fa-history"></i> Orders
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <%- include('../partials/footer1') %>
+  </body>
+</html>

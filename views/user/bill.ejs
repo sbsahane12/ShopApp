@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bill Summary</title>
+    <style>
+      .content-container {
+        width: 100%;
+        max-width: 700px;
+        padding: 20px;
+        background-color: #ffffff;
+        border: 2px solid #90b4ce;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        text-align: center;
+      }
+
+      .headline {
+        color: #094067;
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        border-bottom: 3px solid #094067;
+        padding-bottom: 10px;
+      }
+
+      .headline1 {
+        color: #094067;
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        padding-bottom: 10px;
+      }
+
+      .bill-table th,
+      .bill-table td {
+        color: #094067;
+        text-align: center;
+        padding: 12px;
+      }
+
+      .bill-table th {
+        border-bottom: 3px solid #90b4ce;
+        background-color: #eff3f7;
+      }
+
+      .bill-table td {
+        border-bottom: 2px solid #90b4ce;
+      }
+
+      .total-row {
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .total-amount,
+      .total-reward {
+        border-top: 3px solid #90b4ce;
+        padding-top: 10px;
+        margin-top: 10px;
+      }
+
+      .btn-custom {
+        background-color: #3da9fc;
+        color: #fffffe;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        margin-top: 20px;
+        width: 50%;
+        border-radius: 6px;
+      }
+
+      .btn-custom:hover {
+        background-color: #094067;
+        color: #fffffe;
+      }
+
+      .footer-text {
+        text-align: center;
+        color: #5f6c7b;
+        margin-top: 20px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('../partials/header') %> <%- include('../partials/flash') %>
+    <div class="content-container">
+      <h2 class="headline">Your Bill</h2>
+      <div class="table-responsive">
+        <table class="table bill-table">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orderItems.forEach(item => { %>
+            <tr>
+              <td><%= item.itemName %></td>
+              <td><%= item.categoryName %></td>
+              <td><%= item.quantity %></td>
+              <td>RS.<%= item.price %></td>
+              <td>
+                <%= item.quantity %> X RS.<%= item.price %> = RS.<%=
+                item.quantity * item.price %>
+              </td>
+            </tr>
+            <% }) %>
+            <tr class="total-row">
+              <td colspan="4">Total</td>
+              <td>RS.<%= totalAmount %></td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4">Total Reward Points</td>
+              <td><%= totalRewardPoints %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <form action="/user/items/placeOrder" method="POST">
+        <label class="headline1">
+          <input
+            type="radio"
+            name="paymentOption"
+            value="Cash on Delivery"
+            checked
+          />
+          Cash on Delivery
+        </label>
+        <label class="headline1">
+          <input type="radio" name="paymentOption" value="PhonePe" /> Online
+          Payment
+        </label>
+        <br />
+        <button class="btn-custom" type="submit">Proceed to Payment</button>
+        <p class="footer-text">Thank you for your purchase!</p>
+      </form>
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Items</title>
+    <style>
+      .btn-custom {
+        border-radius: 5px;
+        transition: background-color 0.3s, box-shadow 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+      }
+      .btn-custom:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .modal-header {
+        background-color: #007bff;
+        color: white;
+        border-bottom: 2px solid #0056b3;
+      }
+      .modal-footer {
+        background-color: #f1f1f1;
+        border-top: 2px solid #dee2e6;
+      }
+      .table-responsive {
+        margin-top: 20px;
+        overflow-x: auto;
+      }
+      table {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        min-width: 800px; /* Ensures horizontal scroll for large tables */
+      }
+      table thead {
+        background-color: #007bff;
+        color: white;
+      }
+      table th,
+      table td {
+        vertical-align: middle;
+        padding: 12px 10px;
+      }
+      table tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+      }
+      table th i {
+        margin-left: 4px;
+        color: #dee2e6;
+      }
+      .list-group-item {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .list-group-item i {
+        margin-left: 8px;
+        color: #007bff;
+      }
+      .search-container {
+        position: relative;
+        margin-bottom: 30px;
+      }
+      .search-container i {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        color: #007bff;
+      }
+      #searchInput {
+        padding: 10px 40px;
+        border-radius: 25px;
+        border: 2px solid #007bff;
+        transition: all 0.3s;
+      }
+      #searchInput:focus {
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        outline: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('../partials/header1') %> <%- include('../partials/flash') %>
+    <div class="container mt-5">
+      <h1 class="text-center"><i class="fas fa-box"></i> Items Management</h1>
+
+      <!-- Search Input -->
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchInput"
+          class="form-control"
+          placeholder="Search items by Name"
+        />
+        <i class="fas fa-search"></i>
+      </div>
+
+      <!-- Buttons for Adding Items -->
+      <div class="text-end mb-3">
+        <button
+          class="btn btn-primary btn-custom"
+          data-bs-toggle="modal"
+          data-bs-target="#createItemModal"
+        >
+          <i class="fas fa-plus-circle"></i> Add New Item
+        </button>
+      </div>
+
+      <div class="table-responsive table-container">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th><i class="fas fa-tag"></i> Item Name</th>
+              <th><i class="fas fa-info-circle"></i> Description</th>
+              <th><i class="fas fa-list"></i> Categories</th>
+              <th><i class="fas fa-cogs"></i> Actions</th>
+            </tr>
+          </thead>
+          <tbody id="itemTableBody">
+            <% items.forEach(item => { %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.description %></td>
+              <td>
+                <button
+                  class="btn btn-sm btn-info"
+                  data-bs-toggle="modal"
+                  data-bs-target="#categoriesModal-<%= item._id %>"
+                >
+                  <i class="fas fa-eye"></i> View Categories
+                </button>
+              </td>
+              <td>
+                <button
+                  class="btn btn-warning"
+                  data-bs-toggle="modal"
+                  data-bs-target="#updateItemModal-<%= item._id %>"
+                >
+                  <i class="fas fa-edit"></i> Update
+                </button>
+                <button
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteItemModal-<%= item._id %>"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </td>
+            </tr>
+
+            <!-- Categories Modal -->
+            <div
+              class="modal fade"
+              id="categoriesModal-<%= item._id %>"
+              tabindex="-1"
+              aria-labelledby="categoriesModalLabel-<%= item._id %>"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="categoriesModalLabel-<%= item._id %>"
+                    >
+                      <i class="fas fa-list"></i> Categories for <%= item.name
+                      %>
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <ul class="list-group">
+                      <% item.categories.forEach(category => { %>
+                      <li class="list-group-item">
+                        <span
+                          ><i class="fas fa-tag"></i> <%= category.category
+                          %></span
+                        >
+                        <span
+                          ><i class="fas fa-rupee-sign"></i> <%= category.price
+                          %></span
+                        >
+                        <span
+                          ><i class="fas fa-star"></i> <%= category.reward %>
+                          pts</span
+                        >
+                      </li>
+                      <% }) %>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Update Item Modal -->
+            <div
+              class="modal fade"
+              id="updateItemModal-<%= item._id %>"
+              tabindex="-1"
+              aria-labelledby="updateItemModalLabel-<%= item._id %>"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="updateItemModalLabel-<%= item._id %>"
+                    >
+                      <i class="fas fa-edit"></i> Update Item
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <form
+                    action="/admin/items/<%= item._id %>/update"
+                    method="POST"
+                  >
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label for="name-<%= item._id %>" class="form-label"
+                          >Item Name</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name-<%= item._id %>"
+                          name="name"
+                          value="<%= item.name %>"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label
+                          for="description-<%= item._id %>"
+                          class="form-label"
+                          >Description</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="description-<%= item._id %>"
+                          name="description"
+                          required
+                        >
+<%= item.description %></textarea
+                        >
+                      </div>
+                      <div class="mb-3">
+                        <label
+                          for="categories-<%= item._id %>"
+                          class="form-label"
+                          >Categories and Prices</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="categories-<%= item._id %>"
+                          name="categories"
+                          value="<%= item.categories.map(c => c.category + '-' + c.price + '-' + c.reward).join(', ') %>"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button type="submit" class="btn btn-primary">
+                        Update Item
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delete Item Modal -->
+            <div
+              class="modal fade"
+              id="deleteItemModal-<%= item._id %>"
+              tabindex="-1"
+              aria-labelledby="deleteItemModalLabel-<%= item._id %>"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="deleteItemModalLabel-<%= item._id %>"
+                    >
+                      <i class="fas fa-trash"></i> Delete Item
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      Are you sure you want to delete the item "<%= item.name
+                      %>"?
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <form
+                      action="/admin/items/<%= item._id %>/delete"
+                      method="POST"
+                      class="d-inline"
+                    >
+                      <button type="submit" class="btn btn-danger">
+                        Delete Item
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Create Item Modal -->
+    <div
+      class="modal fade"
+      id="createItemModal"
+      tabindex="-1"
+      aria-labelledby="createItemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createItemModalLabel">
+              <i class="fas fa-plus"></i> Create Item
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form action="/admin/items/create" method="POST">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="name" class="form-label">Item Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  name="description"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="categories" class="form-label"
+                  >Categories and Prices</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="categories"
+                  name="categories"
+                  placeholder="Example: Small-5-10, Medium-10-20"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Create Item</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <%- include('../partials/footer1') %>
+  </body>
+</html>

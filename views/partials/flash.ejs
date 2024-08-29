@@ -1,0 +1,46 @@
+
+  <style>
+    .custom-alert {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .alert-success {
+      background-color: #004d40; /* Darker green */
+      color: #e0f2f1; /* Light green text */
+      border-color: #004d40;
+    }
+
+    .alert-success .btn-close {
+      filter: invert(1); /* Lighten the close button for dark background */
+    }
+
+    .alert-danger {
+      background-color: #b71c1c; /* Darker red */
+      color: #ffcdd2; /* Light pink text */
+      border-color: #b71c1c;
+    }
+
+    .alert-danger .btn-close {
+      filter: invert(1); /* Lighten the close button for dark background */
+    }
+  </style>
+</head>
+
+<body>
+
+  <% if (success.length > 0) { %>
+  <div class="alert alert-success alert-dismissible custom-alert" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% } %>
+
+  <% if (error.length > 0) { %>
+  <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% } %>
+
+</body>

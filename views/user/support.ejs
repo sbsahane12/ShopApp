@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Info</title>
+    <style>
+      .container {
+        margin-top: 50px;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+      }
+      .logo {
+        max-width: 100%;
+        height: auto;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+      }
+      .logo:hover {
+        transform: scale(1.1);
+      }
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #343a40;
+        margin-top: 10px;
+      }
+      .info p {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        color: #555;
+      }
+      .info strong {
+        color: #dc3545;
+      }
+      @media (max-width: 576px) {
+        .info p {
+          font-size: 1.1rem;
+        }
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header') %> <%- include('../partials/flash') %>
+
+    <div class="container">
+      <div class="text-center">
+        <img src="/img/logo.jpg" alt="Company Logo" class="logo img-fluid" />
+        <h1 class="mt-3">Smart Technology</h1>
+      </div>
+      <div class="info text-center">
+        <p><strong>Email:</strong> smarttechnologies736@gmail.com</p>
+        <p><strong>Mobile No:</strong> +91 7507863572</p>
+      </div>
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

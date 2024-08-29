@@ -1,0 +1,26 @@
+<style>
+  .custom-alert {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  .alert-danger {
+    background-color: #b71c1c; /* Darker red */
+    color: #ffcdd2; /* Light pink text */
+    border-color: #b71c1c;
+  }
+
+  .alert-danger .btn-close {
+    filter: invert(1); /* Lighten the close button for dark background */
+  }
+</style>
+<body>
+  <%- include('partials/header') %> <% if (message.length > 0) { %>
+  <div class="alert-danger alert-dismissible custom-alert"><%= message %></div>
+  <% if (!user) { %>
+  <div class="text-center mt-4">
+    <a class="btn btn-danger" href="/">Back To Login</a>
+  </div>
+  <% } %> <% } %> <%- include('partials/footer') %>
+</body>

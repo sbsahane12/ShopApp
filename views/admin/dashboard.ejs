@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced Card Layout</title>
+    <style>
+      .card {
+        text-align: center;
+        border: 2px solid #3da9fc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .card-title {
+        font-size: 1.25rem;
+        color: #094067;
+        margin-top: 15px;
+      }
+      .card-body {
+        background-color: #fffffe;
+      }
+
+      .fa-icon {
+        font-size: 4rem;
+        color: #3da9fc;
+        margin: 20px;
+      }
+
+      .btn-custom {
+        background-color: #3da9fc;
+        color: #fffffe;
+        text-decoration: none;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        margin-top: 20px;
+        width: 50%;
+        border-radius: 6px;
+      }
+
+      .btn-custom:hover {
+        background-color: #094067;
+        color: #fffffe;
+      }
+      .footer {
+        background-color: #094067;
+        color: #fffffe;
+        padding: 12px;
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header1') %> <%- include('../partials/flash') %>
+
+    <div class="container mt-5">
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Purchase Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <i class="fas fa-shopping-cart fa-icon"></i>
+              <h5 class="card-title">All Items</h5>
+              <p class="card-text">View All Items</p>
+              <a href="/admin/items" class="btn-custom">Manage Items</a>
+            </div>
+          </div>
+        </div>
+        <!-- Order History Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <i class="fas fa-history fa-icon"></i>
+              <h5 class="card-title">Order History</h5>
+              <p class="card-text">View Orders History</p>
+              <a href="/admin/orderHistory" class="btn-custom">Manage Orders</a>
+            </div>
+          </div>
+        </div>
+        <!-- Reward Coins Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <i class="fas fa-user fa-icon"></i>
+              <h5 class="card-title">Users</h5>
+              <p class="card-text">Check All Users</p>
+              <a href="admin/users" class="btn-custom">Manage User</a>
+            </div>
+          </div>
+        </div>
+        <!-- Support Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <i class="fas fa-headset fa-icon"></i>
+              <h5 class="card-title">Support</h5>
+              <p class="card-text">Get Support</p>
+              <a href="#" class="btn-custom">Get Support</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../partials/footer1') %>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      .login-container {
+        background-color: #fffffe;
+        border: 2px solid #3da9fc;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        margin: 100px auto;
+      }
+
+      .login-container h1 {
+        color: #094067;
+        margin-bottom: 1.5rem;
+        background-color: #90b4ce;
+        border-radius: 15px;
+      }
+
+      .login-container .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .login-container .form-control {
+        border-color: #90b4ce;
+      }
+
+      .login-container .btn-primary {
+        background-color: #3da9fc;
+        border-color: #3da9fc;
+        width: 100%;
+      }
+
+      .login-container .btn-primary:hover {
+        background-color: #094067;
+        border-color: #094067;
+      }
+
+      .login-container p {
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .login-container a {
+        color: #3da9fc;
+        text-decoration: none;
+      }
+
+      .login-container a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header') %> <%- include('../partials/flash') %>
+    <div class="login-container">
+      <h1 class="text-center">Login</h1>
+      <form action="/" method="POST">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+      </form>
+      <p>Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+    <%- include('../partials/footer') %>
+</html>

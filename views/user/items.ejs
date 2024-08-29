@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=dev-width, initial-scale=1.0" />
+    <title>Order Details</title>
+    <style>
+      .btn-custom {
+        background-color: #3da9fc;
+        color: #fffffe;
+        border-radius: 5px;
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-custom:hover {
+        background-color: #0056b3;
+      }
+
+      .modal-header {
+        background-color: #3da9fc;
+        color: #fffffe;
+      }
+      .table-responsive {
+        margin-top: 20px;
+      }
+
+      .table thead th {
+        background-color: #3da9fc;
+        color: #fffffe;
+      }
+      .table {
+        border: 2px solid #3da9fc;
+      }
+
+      .table-bordered th,
+      .table-bordered td,
+      .table-bordered tr {
+        border: 2px solid #3da9fc;
+      }
+
+      .table-hover tbody tr:hover {
+        background-color: #3da9fc;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header') %> <%- include('../partials/flash') %>
+
+    <div class="container mt-5">
+      <h1 class="text-center"><i class="fas fa-box"></i> Purchase Items</h1>
+      <form action="/user/items/viewBill" method="POST">
+      <div class="table-responsive table-container">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Order ID <i class="fas fa-id-badge"></i></th>
+              <th>Date <i class="fas fa-calendar-day"></i></th>
+              <th>Status <i class="fas fa-info-circle"></i></th>
+              <th>Payment <i class="fas fa-rupee-sign"></i></th>
+              <th>Reward <i class="fas fa-gift"></i></th>
+              <th>Billing <i class="fas fa-credit-card"></i></th>
+            </tr>
+          </thead>
+          <tbody id="orderTableBody">
+            <% items.forEach(item => { %>
+            <tr>
+              <td>
+                <img
+                  src="/img/misal.jpeg"
+                  alt="<%= item.name %>"
+                  style="width: 50px; height: auto"
+                />
+              </td>
+              <td>
+                <input
+                  class="form-check-input1"
+                  type="checkbox"
+                  name="items[<%= item._id %>][selected]"
+                  value="true"
+                />
+              </td>
+              <td><%= item.name %></td>
+              <td><%= item.description %></td>
+              <td>
+                <select
+                  name="items[<%= item._id %>][categoryId]"
+                  class="form-select"
+                >
+                  <% item.categories.forEach(category => { %>
+                  <option value="<%= category._id %>">
+                    <%= category.category %> - Rs.<%= category.price %>
+                  </option>
+                  <% }) %>
+                </select>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  name="items[<%= item._id %>][quantity]"
+                  value="1"
+                  min="1"
+                  class="form-control"
+                />
+                <input
+                  type="hidden"
+                  name="items[<%= item._id %>][itemId]"
+                  value="<%= item._id %>"
+                />
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn-custom">
+          <i class="fas fa-receipt"></i> View Bill
+        </button>
+      </div>
+    </form>
+    </div>
+
+    <%- include('../partials/footer') %>
+  </body>
+</html>

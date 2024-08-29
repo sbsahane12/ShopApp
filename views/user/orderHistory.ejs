@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=dev-width, initial-scale=1.0" />
+    <title>Order Details</title>
+    <style>
+      .btn-custom {
+        background-color: #3da9fc;
+        color: #fffffe;
+        border-radius: 5px;
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-custom:hover {
+        background-color: #0056b3;
+      }
+
+      .modal-header {
+        background-color: #3da9fc;
+        color: #fffffe;
+      }
+      .table-responsive {
+        margin-top: 20px;
+      }
+
+      .table thead th {
+        background-color: #3da9fc;
+        color: #fffffe;
+      }
+      .table {
+        border: 2px solid #3da9fc;
+      }
+
+      .table-bordered th,
+      .table-bordered td,
+      .table-bordered tr {
+        border: 2px solid #3da9fc;
+      }
+
+      .table-hover tbody tr:hover {
+        background-color: #3da9fc;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header') %> <%- include('../partials/flash') %>
+
+    <div class="container mt-5">
+      <h1 class="text-center"><i class="fas fa-box"></i> Order Details</h1>
+      <div class="table-responsive table-container">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Order ID <i class="fas fa-id-badge"></i></th>
+              <th>Date <i class="fas fa-calendar-day"></i></th>
+              <th>Status <i class="fas fa-info-circle"></i></th>
+              <th>Payment <i class="fas fa-rupee-sign"></i></th>
+              <th>Reward <i class="fas fa-gift"></i></th>
+              <th>Billing <i class="fas fa-credit-card"></i></th>
+              <th>Payment Status <i class="fas fa-check-circle"></i></th>
+              <th>View Order <i class="fas fa-boxes"></i></th>
+            </tr>
+          </thead>
+          <tbody id="orderTableBody">
+            <% orders.forEach(order => { %>
+            <tr>
+              <td><%= order._id %></td>
+              <td><%= order.createdAt.toLocaleDateString() %></td>
+
+              <!-- Status Badge -->
+              <td>
+                <% if (order.status === 'Completed') { %>
+                <span class="badge custom-badge bg-success">Completed</span>
+                <% } else if (order.status === 'Pending') { %>
+                <span class="badge custom-badge bg-warning text-dark"
+                  >Pending</span
+                >
+                <% } else { %>
+                <span class="badge custom-badge bg-secondary">Unknown</span>
+                <% } %>
+              </td>
+
+              <td>RS.<%= order.totalAmount %></td>
+              <td><%= order.totalRewardPoints %></td>
+
+              <!-- Billing Badge -->
+              <td>
+                <% if (order.paymentOption === 'Cash on Delivery') { %>
+                <span class="badge custom-badge bg-info">COD</span>
+                <% } else { %>
+                <span class="badge custom-badge bg-primary">Online</span>
+                <% } %>
+              </td>
+
+              <!-- Payment Status Badge -->
+              <td>
+                <% if (order.paymentStatus === 'Pending') { %>
+                <span class="badge custom-badge bg-danger">Pending</span>
+                <% } else { %>
+                <span class="badge custom-badge bg-success">Completed</span>
+                <% } %>
+              </td>
+
+              <td>
+                <button
+                  class="btn-custom"
+                  data-bs-toggle="modal"
+                  data-bs-target="#viewItemsModal-<%= order._id %>"
+                >
+                  <i class="fas fa-eye"></i> View Items
+                </button>
+              </td>
+            </tr>
+
+            <!-- View Items Modal -->
+            <div
+              class="modal fade"
+              id="viewItemsModal-<%= order._id %>"
+              tabindex="-1"
+              aria-labelledby="viewItemsModalLabel-<%= order._id %>"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="viewItemsModalLabel-<%= order._id %>"
+                    >
+                      <i class="fas fa-box-open"></i> Items in Order <%=
+                      order._id %>
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <ul class="list-group">
+                      <% order.items.forEach(orderItem => { %> <% if
+                      (orderItem.item) { %>
+                      <li class="list-group-item">
+                        <%= orderItem.quantity %> x <%= orderItem.item.name %>
+                        (RS.<%= orderItem.price %>)
+                      </li>
+                      <% } else { %>
+                      <li class="list-group-item">Item Deleted</li>
+                      <% } %> <% }) %>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn-custom"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+  </body>
+</html>
