@@ -36,7 +36,7 @@ const orderSchema = Joi.object({
       'string.empty': 'Status is required.',
     }),
   paymentStatus: Joi.string()
-    .valid('Pending', 'Completed')
+    .valid('Pending', 'Completed','Cancelled')
     .required()
     .messages({
       'any.only': 'Invalid payment status.',

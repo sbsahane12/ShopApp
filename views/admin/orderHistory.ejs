@@ -159,8 +159,10 @@
                                 <% if (order.status === 'Completed') { %>
                                     <span class="badge custom-badge bg-success">Completed</span>
                                 <% } else if (order.status === 'Pending') { %>
-                                    <span class="badge custom-badge bg-warning text-dark">Pending</span>
-                                <% } else { %>
+                                    <span class="badge custom-badge bg-warning">Pending</span>
+                                <% } else if (order.status === 'Cancelled') { %>
+                                    <span class="badge custom-badge bg-danger">Cancelled</span>
+                                <% }else { %>
                                     <span class="badge custom-badge bg-secondary">Unknown</span>
                                 <% } %>
                             </td>
@@ -180,7 +182,9 @@
                             <!-- Payment Status Badge -->
                             <td>
                                 <% if (order.paymentStatus === 'Pending') { %>
-                                    <span class="badge custom-badge bg-danger">Pending</span>
+                                    <span class="badge custom-badge bg-warning">Pending</span>
+                                <% }else if (order.paymentStatus === 'Cancelled') { %>
+                                    <span class="badge custom-badge bg-danger">Cancelled</span>
                                 <% } else { %>
                                     <span class="badge custom-badge bg-success">Completed</span>
                                 <% } %>
@@ -251,7 +255,6 @@
                                             <label for="status" class="form-label">Order Status</label>
                                             <select class="form-select" id="status" name="status">
                                                 <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
-                                                <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
                                                 <option value="Completed" <%= order.status === 'Completed' ? 'selected' : '' %>>Completed</option>
                                                 <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                             </select>
@@ -260,6 +263,7 @@
                                             <label for="paymentStatus-<%= order._id %>" class="form-label">Payment Status</label>
                                             <select class="form-select" id="paymentStatus-<%= order._id %>" name="paymentStatus">
                                                 <option value="Pending" <%= order.paymentStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                <option value="Cancelled" <%= order.paymentStatus === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                                 <option value="Completed" <%= order.paymentStatus === 'Completed' ? 'selected' : '' %>>Completed</option>
                                             </select>
                                         </div>
