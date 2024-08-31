@@ -33,9 +33,31 @@ app.use((req, res, next) => {
 
 app.set('view engine', 'ejs');
 
+
 app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/user'));
 app.use('/admin', require('./routes/admin'));
+
+app.get('/terms-and-conditions', (req, res) => {
+  res.render('terms-and-conditions');
+});
+
+app.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy');
+});
+
+app.get('/refund-policy', (req, res) => {
+  res.render('refund-policy');
+});
+
+app.get('/shipping-policy', (req, res) => {
+  res.render('shipping-policy');
+});
+
+app.get('/contact-us', (req, res) => {
+  res.render('contact-us');
+});
+
 
 app.get('*', (req, res) => {
   res.status(404).render('error', { message: 'Page Not Found' });
