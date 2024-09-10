@@ -58,6 +58,14 @@ app.get('/contact-us', (req, res) => {
   res.render('contact-us');
 });
 
+app.get("/about-us",(req,res)=>{
+  res.render("about-us")
+})
+
+app.get("/services",(req,res)=>{
+  res.render("services")
+})
+
 
 app.get('*', (req, res) => {
   res.status(404).render('error', { message: 'Page Not Found' });

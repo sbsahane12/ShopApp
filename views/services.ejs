@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #5f6c7b;
+            background-color: #fffffe;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #094067;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        a {
+            color: #3da9fc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background: #094067;
+            color: #fffffe;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="container mt-5">
+        <h1>Our Services</h1>
+        <p>At Hotel Sai Manoj, we pride ourselves on offering a variety of services to satisfy your cravings, from snacks to full meals, delivered directly to your home. Below are the services we provide:</p>
+
+        <h2>1. Online Food Delivery</h2>
+        <p>Our core service is delivering freshly prepared, delicious food to your doorstep. We specialize in:
+            <ul>
+                <li>Cheesy and customizable pizzas</li>
+                <li>Juicy and flavorful burgers</li>
+                <li>Crispy and tasty snacks like samosas, vada pav, and more</li>
+                <li>Refreshing beverages to complement your meals</li>
+            </ul>
+            You can easily browse our menu online, place an order, and enjoy fast and reliable delivery.
+        </p>
+
+        <h2>2. Customizable Orders</h2>
+        <p>We understand that everyone has different preferences, which is why we allow you to customize your food. Whether you want extra toppings on your pizza or a spicier version of our vada pav, we've got you covered!</p>
+
+        <h2>3. Bulk Orders for Events</h2>
+        <p>Hosting an event? We offer bulk orders for parties, office events, or gatherings. Our team will ensure your food is delivered hot and fresh, making your event a success with delicious food options.</p>
+
+        <h2>4. Fast and Secure Payment Options</h2>
+        <p>We provide a range of payment options including credit/debit cards, UPI, and digital wallets, all secured through trusted payment gateways. Enjoy hassle-free, secure transactions every time.</p>
+
+        <h2>5. Customer Support</h2>
+        <p>If you have any issues or special requests, our customer support team is always available to assist you. Feel free to <a href="/contact">contact us</a> anytime for help with orders, payments, or general inquiries.</p>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

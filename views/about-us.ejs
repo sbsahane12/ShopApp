@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #5f6c7b;
+            background-color: #fffffe;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #094067;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        a {
+            color: #3da9fc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background: #094067;
+            color: #fffffe;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="container mt-5">
+        <h1>About Us</h1>
+        <p>Welcome to Hotel Sai Manoj, your go-to destination for delicious and convenient online food delivery. We specialize in a variety of mouth-watering snacks, pizzas, burgers, and vada pav, all prepared with the freshest ingredients and delivered right to your doorstep.</p>
+
+        <h2>Our Mission</h2>
+        <p>Our mission is to bring high-quality, flavorful food to our customers in the most convenient way possible. Whether you're craving a classic burger, a cheesy pizza, or some tasty vada pav, we aim to provide a delightful dining experience from the comfort of your home.</p>
+
+        <h2>What We Offer</h2>
+        <p>At Hotel Sai Manoj, we offer a wide range of food options including:
+            <ul>
+                <li>Delicious Pizzas</li>
+                <li>Juicy Burgers</li>
+                <li>Savory Snacks</li>
+                <li>Crispy Vada Pav</li>
+            </ul>
+        Our menu is crafted to satisfy every taste and preference, ensuring there's something for everyone.</p>
+
+        <h2>Why Choose Us?</h2>
+        <p>We are committed to delivering top-notch food with exceptional service. Our chefs use only the best ingredients, and our delivery team ensures that your food arrives fresh and on time. Choose us for a hassle-free, enjoyable dining experience.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions or need assistance, please <a href="/contact">contact us</a>. We're here to help and ensure you have a great experience with us!</p>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
